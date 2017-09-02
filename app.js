@@ -1,4 +1,4 @@
-'strict';
+'use strict';
 
 const Cell = class {
     constructor(param) {
@@ -18,7 +18,6 @@ const Cell = class {
             [0, 1, 0, 0, 0, 0, 0],
             [0, 1, 0, 0, 0, 0, 0],
         ];
-        this.cellValue = 0;
     }
     init() {
         const start = this.parent_doc.querySelectorAll(`.${this.cell}`)[0].children[0];
@@ -60,12 +59,17 @@ const Cell = class {
         if(!(typeof (i, j) !== 'undefined')) return;
         const cellState = this.miro[i][j];
         if(cellState === 0) return e.target.classList.add('pass');
-        else if(cellState === 1) e.target.classList.add('wall');
+        else if(cellState === 1) {
+            e.target.classList.add('wall');
+            console.log('wall');
+        }
     }
     handleErrorCheck(e) {
         if (e.target.classList.contains('wall')) {
-            return alert('실패했습니다.');
-            // this.handleErrorInit();
+            setTimeout(() => {
+                alert('실패했습니다.');
+                this.handleErrorInit();
+            }, 500);
         }
     }
     handleErrorInit() {
@@ -84,8 +88,10 @@ const Cell = class {
         if(this.heightCellAll[i].children[j-1]) cellHasClass += this.heightCellAll[i].children[j-1].classList;
 
         if(!cellHasClass.length) {
-            e.target.classList.remove('wall', 'pass');
-            alert('블록을 건너띄면서 진행할수 없습니다.');
+            setTimeout(() => {
+                e.target.classList.remove('wall', 'pass');
+                alert('블록을 건너띄면서 진행할수 없습니다.');
+            }, 500);
         } else {
             this.complete();
         }
@@ -101,8 +107,9 @@ const Cell = class {
         this.cellInjectValue();
         this.handleClickVerify();
     }
-}
-cellParam = {
+};
+
+const cellParam = {
     parent: '.root',
     cell: 'heightCell',
     widthLength: 7,
